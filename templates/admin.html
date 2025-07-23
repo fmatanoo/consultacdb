@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Sistema Customer ID</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1><i class="fas fa-cog"></i> Área Administrativa</h1>
+            <p>Carregue planilhas CSV e gerencie o sistema</p>
+            
+            <!-- Estatísticas -->
+            <div class="stats" id="stats">
+                <div class="stat-item">
+                    <i class="fas fa-file-csv"></i>
+                    <span id="totalPlanilhas">0</span>
+                    <label>Planilhas</label>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-users"></i>
+                    <span id="totalCustomers">0</span>
+                    <label>Customers</label>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span id="customersAtivos">0</span>
+                    <label>Ativos</label>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Seção de Upload -->
+            <div class="upload-section">
+                <h2><i class="fas fa-upload"></i> Carregar Nova Planilha</h2>
+                <p>Faça upload de uma planilha CSV com a coluna "customer_id"</p>
+                
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="file-input-wrapper">
+                        <input type="file" id="csvFile" name="arquivo" accept=".csv" class="file-input">
+                        <label for="csvFile" class="file-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Clique para selecionar arquivo CSV</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="upload-button" id="uploadButton">
+                        <i class="fas fa-upload"></i> Carregar Planilha
+                    </button>
+                </form>
+
+                <div class="upload-status" id="uploadStatus" style="display: none;">
+                    <div class="status-content">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Carregando planilha...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção de Planilhas Carregadas -->
+            <div class="planilhas-section">
+                <h2><i class="fas fa-list"></i> Planilhas Carregadas</h2>
+                <p>Histórico de todas as planilhas carregadas no sistema</p>
+                
+                <div class="planilhas-container" id="planilhasContainer">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Carregando planilhas...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão de Relatório -->
+            <div class="relatorio-section">
+                <h2><i class="fas fa-download"></i> Relatório</h2>
+                <p>Baixe um relatório completo com todos os customers</p>
+                
+                <button id="downloadRelatorio" class="download-button">
+                    <i class="fas fa-download"></i> Baixar Relatório CSV
+                </button>
+            </div>
+
+            <!-- Link para área de consulta -->
+            <div class="consulta-link-section">
+                <h2><i class="fas fa-search"></i> Área de Consulta</h2>
+                <p>Acesse a interface de consulta para atendimento</p>
+                
+                <a href="/" class="consulta-link-button">
+                    <i class="fas fa-external-link-alt"></i> Ir para Consulta Pública
+                </a>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Sistema de Consulta Customer ID - Área Administrativa</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='admin.js') }}"></script>
+</body>
+</html> 

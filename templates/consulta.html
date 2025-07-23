@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta Customer ID</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1><i class="fas fa-search"></i> Consulta Customer ID</h1>
+            <p>Verifique o status do seu customer_id</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Seção de Consulta -->
+            <div class="search-section">
+                <h2><i class="fas fa-search"></i> Consultar Customer ID</h2>
+                <p>Digite o customer_id para verificar o status atual</p>
+                
+                <div class="search-container">
+                    <div class="input-group">
+                        <input type="text" id="searchInput" placeholder="Digite o customer_id..." class="search-input">
+                        <button id="searchButton" class="search-button">
+                            <i class="fas fa-search"></i> Consultar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Resultado da Consulta -->
+                <div class="result-section" id="resultSection" style="display: none;">
+                    <div class="result-card" id="resultCard">
+                        <div class="result-icon" id="resultIcon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="result-content">
+                            <h3 id="resultTitle">Customer Encontrado</h3>
+                            <p id="resultMessage">O customer foi encontrado na base de dados.</p>
+                            <div class="result-details" id="resultDetails"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instruções -->
+            <div class="instructions-section">
+                <h2><i class="fas fa-info-circle"></i> Como Funciona</h2>
+                <div class="instructions-grid">
+                    <div class="instruction-card">
+                        <i class="fas fa-check-circle"></i>
+                        <h3>Ativo</h3>
+                        <p>Customer está na última planilha carregada</p>
+                    </div>
+                    <div class="instruction-card">
+                        <i class="fas fa-clock"></i>
+                        <h3>Inativo</h3>
+                        <p>Customer participou antes, mas não está mais ativo</p>
+                    </div>
+                    <div class="instruction-card">
+                        <i class="fas fa-times-circle"></i>
+                        <h3>Não Encontrado</h3>
+                        <p>Customer nunca esteve nas planilhas</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Sistema de Consulta Customer ID</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='consulta.js') }}"></script>
+</body>
+</html> 
