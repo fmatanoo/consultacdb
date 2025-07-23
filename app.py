@@ -14,9 +14,17 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'sua_chave_secreta_aqui'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///customer_tracking.db'
+
+# Configuração do banco de dados para Vercel
+if os.environ.get('VERCEL_ENV'):
+    # Ambiente Vercel - usar banco em memória
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+else:
+    # Ambiente local - usar arquivo
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///customer_tracking.db'
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['UPLOAD_FOLDER'] = '/tmp/uploads'  # Usar /tmp no Vercel
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
 
 # Criar pasta de uploads se não existir
@@ -30,14 +38,14 @@ class Planilha(db.Model):
     nome_arquivo = db.Column(db.String(255), nullable=False)
     data_upload = db.Column(db.DateTime, default=datetime.utcnow)
     quantidade_registros = db.Column(db.Integer, nullable=False)
-    data_planilha = db.Column(db.Date, nullable=False)  # Data da planilha (nome do arquivo ou data de upload)
+    data_planilha = db.Column(db.Date, nullable=False)
 
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.String(50), nullable=False)
     planilha_id = db.Column(db.Integer, db.ForeignKey('planilha.id'), nullable=False)
     data_entrada = db.Column(db.Date, nullable=False)
-    data_saida = db.Column(db.Date, nullable=True)  # Null se ainda ativo
+    data_saida = db.Column(db.Date, nullable=True)
     ativo = db.Column(db.Boolean, default=True)
 
 # Criar tabelas
@@ -79,7 +87,7 @@ def upload_csv():
         if 'customer_id' not in df.columns:
             return jsonify({'erro': 'Coluna "customer_id" não encontrada no arquivo'}), 400
         
-        # Data da planilha (usar data atual se não especificada)
+        # Data da planilha
         data_planilha = datetime.now().date()
         
         # Criar registro da planilha
@@ -100,14 +108,13 @@ def upload_csv():
             if not customer_id or customer_id == 'nan':
                 continue
             
-            # Verificar se customer já existe em alguma planilha
+            # Verificar se customer já existe
             customer_existente = Customer.query.filter_by(
                 customer_id=customer_id, 
                 ativo=True
             ).first()
             
             if customer_existente:
-                # Marcar como inativo na planilha anterior
                 customer_existente.ativo = False
                 customer_existente.data_saida = data_planilha
             
@@ -139,7 +146,7 @@ def upload_csv():
 @app.route('/api/consultar/<customer_id>')
 def consultar_customer(customer_id):
     try:
-        # Buscar histórico completo do customer
+        # Buscar histórico do customer
         historico = Customer.query.filter_by(
             customer_id=customer_id
         ).order_by(Customer.data_entrada.desc()).all()
@@ -150,7 +157,7 @@ def consultar_customer(customer_id):
                 'mensagem': f'Customer ID {customer_id} não encontrado em nenhuma planilha'
             })
         
-        # Verificar se está ativo na última planilha
+        # Verificar se está ativo
         ultimo_registro = historico[0]
         ativo_atual = ultimo_registro.ativo
         
@@ -167,7 +174,7 @@ def consultar_customer(customer_id):
                     'data_upload': planilha.data_upload.strftime('%d/%m/%Y %H:%M')
                 })
         
-        # Determinar mensagem baseada no status
+        # Determinar mensagem
         if ativo_atual:
             mensagem = f'Customer ID {customer_id} está ATIVO na última planilha carregada.'
         else:
@@ -193,7 +200,6 @@ def listar_planilhas():
         
         dados = []
         for planilha in planilhas:
-            # Contar customers ativos nesta planilha
             customers_ativos = Customer.query.filter_by(
                 planilha_id=planilha.id, 
                 ativo=True
@@ -220,7 +226,6 @@ def estatisticas():
         total_customers = Customer.query.count()
         customers_ativos = Customer.query.filter_by(ativo=True).count()
         
-        # Última planilha
         ultima_planilha = Planilha.query.order_by(Planilha.data_upload.desc()).first()
         
         return jsonify({
@@ -240,16 +245,13 @@ def estatisticas():
 @app.route('/api/relatorio')
 def gerar_relatorio():
     try:
-        # Buscar todos os customers com histórico
         customers = db.session.query(Customer.customer_id).distinct().all()
         
-        # Criar relatório
         output = io.StringIO()
         writer = csv.writer(output)
         writer.writerow(['Customer ID', 'Data de Entrada', 'Data de Saída', 'Status Atual'])
         
         for (customer_id,) in customers:
-            # Buscar primeiro e último registro
             primeiro = Customer.query.filter_by(customer_id=customer_id).order_by(Customer.data_entrada.asc()).first()
             ultimo = Customer.query.filter_by(customer_id=customer_id).order_by(Customer.data_entrada.desc()).first()
             
@@ -271,7 +273,7 @@ def gerar_relatorio():
     except Exception as e:
         return jsonify({'erro': f'Erro ao gerar relatório: {str(e)}'}), 500
 
-# Para o Vercel
+# Configurações para Vercel
 app.debug = False
 
 if __name__ == '__main__':
