@@ -2,8 +2,6 @@ services:
   - type: web
     name: consulta-excel
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: python app.py
-    envVars:
-      - key: PYTHON_VERSION
-        value: 3.9.16 
+    plan: free
+    buildCommand: pip install Flask
+    startCommand: python app.py 
