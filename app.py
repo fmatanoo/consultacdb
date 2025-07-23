@@ -271,5 +271,8 @@ def gerar_relatorio():
     except Exception as e:
         return jsonify({'erro': f'Erro ao gerar relatório: {str(e)}'}), 500
 
+# Para o Vercel
+app.debug = False
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000) 
