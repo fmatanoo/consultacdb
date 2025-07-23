@@ -2,38 +2,69 @@
 
 Sistema simples para carregar planilhas CSV e consultar o status de customer_ids.
 
-## 🚀 Como Usar
+## 🚀 Funcionalidades
 
-### 📊 **Interface Administrativa** (`/admin`)
-**Acesso restrito para você carregar planilhas:**
+- ✅ **Upload simples** de planilhas CSV
+- ✅ **Consulta rápida** por customer_id
+- ✅ **Histórico completo** de todas as planilhas
+- ✅ **Status atual** (ativo/inativo)
+- ✅ **Relatórios** em JSON
+- ✅ **Interface responsiva** para mobile
+- ✅ **Duas interfaces separadas** (admin e consulta)
 
-1. **Carregar Planilha CSV**
-   - Acesse: `http://localhost:5000/admin`
-   - Clique em "Carregar Nova Planilha"
-   - Selecione um arquivo CSV que contenha a coluna `customer_id`
-   - Clique em "Carregar Planilha"
-   - O sistema processará automaticamente
+## 📋 Pré-requisitos
 
-2. **Ver Histórico**
-   - Visualize todas as planilhas carregadas
-   - Veja quantos customers estão ativos em cada planilha
-   - Acompanhe as datas de upload
+- Python 3.7 ou superior
+- Git (para clonar o repositório)
 
-3. **Baixar Relatório**
-   - Clique em "Baixar Relatório CSV"
-   - Receba um arquivo com todos os customers e seus status
+## 🛠️ Instalação
 
-### 🔍 **Interface de Consulta** (`/`)
-**Acesso público para atendimento:**
+### 1. Clonar o repositório
+```bash
+git clone https://github.com/SEU_USUARIO/consulta_excel.git
+cd consulta_excel
+```
 
-1. **Consultar Customer ID**
-   - Acesse: `http://localhost:5000`
-   - Digite o customer_id no campo de busca
-   - Clique em "Consultar" ou pressione Enter
-   - Veja o resultado:
-     - ✅ **Ativo**: Customer está na última planilha carregada
-     - ⚠️ **Inativo**: Customer participou antes, mas não está mais ativo
-     - ❌ **Não encontrado**: Customer nunca esteve nas planilhas
+### 2. Instalar dependências
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Executar o sistema
+```bash
+python app.py
+```
+
+### 4. Acessar no navegador
+```
+http://localhost:5000
+```
+
+## 🔗 URLs do Sistema
+
+- **Consulta Pública**: `http://localhost:5000/` (para atendimento)
+- **Área Administrativa**: `http://localhost:5000/admin` (para você)
+
+## 📊 Como Usar
+
+### Interface Administrativa (`/admin`)
+**Para carregar planilhas:**
+
+1. Acesse: `http://localhost:5000/admin`
+2. Clique em "Carregar Nova Planilha"
+3. Selecione um arquivo CSV com a coluna `customer_id`
+4. Clique em "Carregar Planilha"
+
+### Interface de Consulta (`/`)
+**Para atendimento ao cliente:**
+
+1. Acesse: `http://localhost:5000`
+2. Digite o customer_id no campo de busca
+3. Clique em "Consultar"
+4. Veja o resultado:
+   - ✅ **Ativo**: Customer está na última planilha
+   - ⚠️ **Inativo**: Customer participou antes, mas não está mais ativo
+   - ❌ **Não encontrado**: Customer nunca esteve nas planilhas
 
 ## 📋 Formato do CSV
 
@@ -46,57 +77,16 @@ customer_id
 11111
 ```
 
-## 🛠️ Instalação
+## 🚀 Deploy
 
-1. **Instalar dependências:**
-```bash
-pip install -r requirements.txt
-```
+### Render (Recomendado)
+1. Faça fork deste repositório
+2. Conecte ao Render.com
+3. Use o arquivo `render.yaml` para configuração automática
+4. Deploy automático!
 
-2. **Executar o sistema:**
-```bash
-python app.py
-```
-
-3. **Acessar no navegador:**
-```
-http://localhost:5000
-```
-
-## 📊 Funcionalidades
-
-- ✅ **Upload simples** de planilhas CSV
-- ✅ **Consulta rápida** por customer_id
-- ✅ **Histórico completo** de todas as planilhas
-- ✅ **Status atual** (ativo/inativo)
-- ✅ **Relatórios** em CSV
-- ✅ **Interface responsiva** para mobile
-
-## 🔧 Deploy no Vercel
-
-Para colocar online no Vercel:
-
-1. **Criar arquivo `vercel.json`:**
-```json
-{
-  "version": 2,
-  "builds": [
-    {
-      "src": "app.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "app.py"
-    }
-  ]
-}
-```
-
-2. **Fazer upload no Vercel**
-3. **Configurar variáveis de ambiente se necessário**
+### Outros provedores
+O sistema funciona em qualquer provedor que suporte Python/Flask.
 
 ## 📁 Estrutura do Projeto
 
@@ -110,23 +100,18 @@ consulta_excel/
 │   ├── styles.css        # Estilos
 │   ├── consulta.js       # JavaScript da consulta
 │   └── admin.js          # JavaScript do admin
-├── uploads/              # Pasta para arquivos carregados
-├── customer_tracking.db  # Banco de dados SQLite
 ├── requirements.txt      # Dependências Python
+├── render.yaml          # Configuração Render
+├── .gitignore           # Arquivos ignorados pelo Git
+├── LICENSE              # Licença MIT
 └── exemplo_customers.csv # Arquivo de exemplo
 ```
 
-## 🔗 URLs do Sistema
+## 🛠️ Tecnologias
 
-- **Consulta Pública**: `http://localhost:5000/` (para atendimento)
-- **Área Administrativa**: `http://localhost:5000/admin` (para você)
-
-## 🎯 Exemplo de Uso
-
-1. **Carregue a primeira planilha** com customers ativos
-2. **Carregue uma segunda planilha** (alguns customers podem sair)
-3. **Consulte um customer_id** para ver se está ativo
-4. **Veja o histórico** de quando entrou e saiu
+- **Backend**: Flask
+- **Frontend**: HTML5, CSS3, JavaScript
+- **Deploy**: Render
 
 ## 📞 Suporte
 
@@ -135,52 +120,18 @@ Se precisar de ajuda:
 - Confirme que o arquivo é válido
 - Teste com o arquivo de exemplo fornecido
 
+## 🤝 Contribuição
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+
 ---
 
 **Desenvolvido para facilitar a consulta de customer_ids de forma simples e intuitiva!** 🎉 
-
-## 🔧 **Vou te ajudar a resolver isso passo a passo:**
-
-### 🎯 **Estratégia de Debug:**
-
-1. **Primeiro, vamos testar com uma versão simples**
-2. **Depois identificar onde está o problema**
-3. **Por fim, corrigir o app principal**
-
-### 📋 **Passos para resolver:**
-
-#### **1. Teste com versão simples:**
-```bash
-<code_block_to_apply_changes_from>
-```
-
-#### **2. Faça deploy da versão de teste:**
-- Suba para o GitHub
-- Deploy no Vercel
-- Teste se funciona
-
-#### **3. Se funcionar, o problema é no app principal:**
-- Vamos ajustar o app principal
-- Se não funcionar, é problema de configuração
-
-###  **Possíveis causas do erro:**
-
-1. **Banco de dados SQLite** - Não funciona bem no Vercel
-2. **Dependências** - Conflitos de versão
-3. **Configuração** - Problema no vercel.json
-4. **Upload de arquivos** - Problema com /tmp
-
-### 💡 **Soluções que implementei:**
-
-1. **Banco em memória** no Vercel
-2. **Pasta /tmp** para uploads
-3. **Configuração simplificada** do vercel.json
-4. **App de teste** para debug
-
-### 🚀 **Próximos passos:**
-
-1. **Teste com a versão simples primeiro**
-2. **Me diga se funcionou**
-3. **Vamos ajustar o app principal**
-
-**Quer que eu te ajude a fazer o teste com a versão simples?** 😊 
