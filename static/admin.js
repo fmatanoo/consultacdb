@@ -50,7 +50,9 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('uploadButton').disabled = false;
             
             if (data.sucesso) {
-                mostrarMensagem(data.mensagem, 'success');
+                const detalhes = data.dados;
+                const mensagem = `${data.mensagem}\n\nRegistros processados: ${detalhes.registros_processados}\nNovos customers: ${detalhes.novos_customers}\nCustomers atualizados: ${detalhes.customers_atualizados}`;
+                mostrarMensagem(mensagem, 'success');
                 uploadForm.reset();
                 carregarEstatisticas();
                 carregarPlanilhas();

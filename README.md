@@ -1,75 +1,90 @@
 # Sistema de Consulta Customer ID
 
-Sistema simples para carregar planilhas CSV e consultar o status de customer_ids.
+Sistema web para consulta de customer IDs com histórico completo de planilhas CSV carregadas.
 
 ## 🚀 Funcionalidades
 
-- ✅ **Upload simples** de planilhas CSV
-- ✅ **Consulta rápida** por customer_id
-- ✅ **Histórico completo** de todas as planilhas
-- ✅ **Status atual** (ativo/inativo)
-- ✅ **Relatórios** em JSON
-- ✅ **Interface responsiva** para mobile
-- ✅ **Duas interfaces separadas** (admin e consulta)
+### **Interface de Consulta (Pública)**
+- Busca por customer_id
+- Mostra status atual (ativo/inativo)
+- Exibe histórico completo de participação
+- Interface simples para atendimento
 
-## 📋 Pré-requisitos
+### **Interface Administrativa**
+- Upload de planilhas CSV
+- Visualização de estatísticas
+- Histórico de todas as planilhas carregadas
+- Geração de relatórios CSV
+- Controle de acesso restrito
 
-- Python 3.7 ou superior
-- Git (para clonar o repositório)
+### **Rastreamento de Histórico**
+- **Data de entrada**: Quando o customer_id apareceu pela primeira vez
+- **Data de saída**: Quando o customer_id saiu da lista (se aplicável)
+- **Status atual**: Se está ativo na última planilha
+- **Histórico completo**: Todas as planilhas onde participou
 
-## 🛠️ Instalação
+## 📊 Banco de Dados PostgreSQL
 
-### 1. Clonar o repositório
-```bash
-git clone https://github.com/SEU_USUARIO/consulta_excel.git
-cd consulta_excel
+### **Tabelas:**
+- **Planilha**: Registro de cada upload
+- **Customer**: Histórico completo de cada customer_id
+
+### **Rastreamento Automático:**
+```
+Planilha 1: [123, 456, 789] → Todos ativos
+Planilha 2: [123, 456] → 789 fica inativo
+Planilha 3: [123, 999] → 456 fica inativo, 999 novo ativo
 ```
 
-### 2. Instalar dependências
-```bash
-pip install -r requirements.txt
+## 🛠️ Tecnologias
+
+- **Backend**: Flask + SQLAlchemy
+- **Banco**: PostgreSQL (Render)
+- **Frontend**: HTML + CSS + JavaScript
+- **Deploy**: Render.com
+
+## 📁 Estrutura do Projeto
+
+```
+consulta_excel/
+├── app.py                 # Aplicação principal
+├── requirements.txt       # Dependências Python
+├── render.yaml           # Configuração Render
+├── Procfile             # Configuração alternativa
+├── templates/
+│   ├── consulta.html    # Interface de consulta
+│   └── admin.html       # Interface administrativa
+├── static/
+│   ├── styles.css       # Estilos CSS
+│   ├── admin.js         # JavaScript admin
+│   └── consulta.js      # JavaScript consulta
+└── CONFIGURACAO_RENDER.md # Guia de configuração
 ```
 
-### 3. Executar o sistema
-```bash
-python app.py
-```
+## 🚀 Deploy no Render
 
-### 4. Acessar no navegador
-```
-http://localhost:5000
-```
+### **Passos Rápidos:**
 
-## 🔗 URLs do Sistema
+1. **Criar conta no Render**: https://render.com
+2. **Criar banco PostgreSQL**:
+   - New → PostgreSQL
+   - Name: `consulta-excel-db`
+   - Plan: Free
+3. **Criar Web Service**:
+   - New → Web Service
+   - Conectar repositório GitHub
+   - Build: `pip install -r requirements.txt`
+   - Start: `python app.py`
+4. **Configurar DATABASE_URL**:
+   - Environment → DATABASE_URL (copiar do banco)
+5. **Deploy**: Create Web Service
 
-- **Consulta Pública**: `http://localhost:5000/` (para atendimento)
-- **Área Administrativa**: `http://localhost:5000/admin` (para você)
-
-## 📊 Como Usar
-
-### Interface Administrativa (`/admin`)
-**Para carregar planilhas:**
-
-1. Acesse: `http://localhost:5000/admin`
-2. Clique em "Carregar Nova Planilha"
-3. Selecione um arquivo CSV com a coluna `customer_id`
-4. Clique em "Carregar Planilha"
-
-### Interface de Consulta (`/`)
-**Para atendimento ao cliente:**
-
-1. Acesse: `http://localhost:5000`
-2. Digite o customer_id no campo de busca
-3. Clique em "Consultar"
-4. Veja o resultado:
-   - ✅ **Ativo**: Customer está na última planilha
-   - ⚠️ **Inativo**: Customer participou antes, mas não está mais ativo
-   - ❌ **Não encontrado**: Customer nunca esteve nas planilhas
+### **Configuração Detalhada:**
+Veja `CONFIGURACAO_RENDER.md` para instruções completas.
 
 ## 📋 Formato do CSV
 
-Seu arquivo CSV deve ter apenas uma coluna:
-
+### **Estrutura:**
 ```csv
 customer_id
 12345
@@ -77,61 +92,54 @@ customer_id
 11111
 ```
 
-## 🚀 Deploy
+### **Requisitos:**
+- Arquivo CSV
+- Coluna obrigatória: `customer_id`
+- Sem outras colunas necessárias
+- Encoding: UTF-8
 
-### Render (Recomendado)
-1. Faça fork deste repositório
-2. Conecte ao Render.com
-3. Use o arquivo `render.yaml` para configuração automática
-4. Deploy automático!
+## 🔍 Como Usar
 
-### Outros provedores
-O sistema funciona em qualquer provedor que suporte Python/Flask.
+### **Para Administradores:**
+1. Acesse `/admin`
+2. Faça upload de planilhas CSV
+3. Monitore estatísticas
+4. Gere relatórios
 
-## 📁 Estrutura do Projeto
+### **Para Atendimento:**
+1. Acesse `/` (página principal)
+2. Digite o customer_id
+3. Veja status e histórico
 
+## 📈 Relatórios
+
+### **Relatório CSV inclui:**
+- Customer ID
+- Data de entrada
+- Data de saída
+- Status atual
+- Total de planilhas
+
+## 🔧 Desenvolvimento Local
+
+### **Instalar dependências:**
+```bash
+pip install -r requirements.txt
 ```
-consulta_excel/
-├── app.py                 # Aplicação principal
-├── templates/
-│   ├── consulta.html     # Interface de consulta pública
-│   └── admin.html        # Interface administrativa
-├── static/
-│   ├── styles.css        # Estilos
-│   ├── consulta.js       # JavaScript da consulta
-│   └── admin.js          # JavaScript do admin
-├── requirements.txt      # Dependências Python
-├── render.yaml          # Configuração Render
-├── .gitignore           # Arquivos ignorados pelo Git
-├── LICENSE              # Licença MIT
-└── exemplo_customers.csv # Arquivo de exemplo
+
+### **Executar localmente:**
+```bash
+python app.py
 ```
 
-## 🛠️ Tecnologias
+### **Acessar:**
+- **Local**: http://localhost:5000
+- **Admin**: http://localhost:5000/admin
 
-- **Backend**: Flask
-- **Frontend**: HTML5, CSS3, JavaScript
-- **Deploy**: Render
+## 📝 Licença
 
-## 📞 Suporte
-
-Se precisar de ajuda:
-- Verifique se o CSV tem a coluna `customer_id`
-- Confirme que o arquivo é válido
-- Teste com o arquivo de exemplo fornecido
-
-## 🤝 Contribuição
-
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+MIT License - veja arquivo LICENSE.
 
 ---
 
-**Desenvolvido para facilitar a consulta de customer_ids de forma simples e intuitiva!** 🎉 
+**Sistema completo com histórico persistente e rastreamento automático!** 🎉 
