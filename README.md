@@ -1,6 +1,6 @@
 # Sistema de Consulta Customer ID
 
-Sistema web para consulta de customer IDs com histórico completo de planilhas CSV carregadas.
+Sistema web para consulta de customer IDs com histórico completo de planilhas CSV carregadas e banco PostgreSQL.
 
 ## 🚀 Funcionalidades
 
@@ -47,18 +47,21 @@ Planilha 3: [123, 999] → 456 fica inativo, 999 novo ativo
 
 ```
 consulta_excel/
-├── app.py                 # Aplicação principal
-├── requirements.txt       # Dependências Python
-├── render.yaml           # Configuração Render
-├── Procfile             # Configuração alternativa
+├── app.py                    # Aplicação principal
+├── requirements.txt          # Dependências Python
+├── render.yaml              # Configuração Render
 ├── templates/
-│   ├── consulta.html    # Interface de consulta
-│   └── admin.html       # Interface administrativa
+│   ├── consulta.html       # Interface de consulta
+│   └── admin.html          # Interface administrativa
 ├── static/
-│   ├── styles.css       # Estilos CSS
-│   ├── admin.js         # JavaScript admin
-│   └── consulta.js      # JavaScript consulta
-└── CONFIGURACAO_RENDER.md # Guia de configuração
+│   ├── styles.css          # Estilos CSS
+│   ├── admin.js            # JavaScript admin
+│   └── consulta.js         # JavaScript consulta
+├── exemplo_customers.csv   # Arquivo de exemplo
+├── CONFIGURAR_BANCO_RENDER.md # Guia de configuração
+├── README.md               # Documentação
+├── LICENSE                 # Licença MIT
+└── .gitignore             # Arquivos ignorados
 ```
 
 ## 🚀 Deploy no Render
@@ -80,7 +83,7 @@ consulta_excel/
 5. **Deploy**: Create Web Service
 
 ### **Configuração Detalhada:**
-Veja `CONFIGURACAO_RENDER.md` para instruções completas.
+Veja `CONFIGURAR_BANCO_RENDER.md` para instruções completas.
 
 ## 📋 Formato do CSV
 
